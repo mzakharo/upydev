@@ -561,16 +561,17 @@ def firmwaretools_action(args, unkwargs, **kargs):
             print(f'OTA not available, {devname} is NOT a OTA capable device')
             sys.exit()
 
-        if 'esp32' in fwfile:
+        if True:
             dev = None
+            '''
             # Extract micropython.bin from firmware.bin
             with open(fwfile, 'rb') as fw:
                 offset = fw.read(MICROPYTHON_BIN_OFFSET)
                 app = fw.read()
             with open(f"ota-{fwfile}", 'wb') as fw_app:
                 fw_app.write(app)
-
             fwfile = f"ota-{fwfile}"
+            '''
 
             if dt == 'WebSocketDevice':
                 if args.i:
@@ -604,12 +605,12 @@ def firmwaretools_action(args, unkwargs, **kargs):
                 OTA_server = OTAServer(
                     dev, port=8014, firmware=fwfile, tls=args.sec, zt=args.zt)
                 OTA_server.start_ota()
-                # print('Rebooting device...')
+                print('Rebooting device...')
                 time.sleep(1)
                 dev.cmd_nb('import machine;machine.reset()', block_dev=False)
                 time.sleep(2)
                 dev.disconnect()
-                os.remove(fwfile)
+                #os.remove(fwfile)
                 # print('Done!')
             elif dt == 'BleDevice':
 
